@@ -18,14 +18,25 @@ public class BrokerDemoMainApplication {
     }
 
     public static Client ClientFactory(String apiKey,String secertKey,String passPhrase,String[] args){
-        ApplicationContext context = SpringApplication.run(BrokerDemoMainApplication.class,args);
+        ApplicationContext context;
+        if(args != null){
+            context = SpringApplication.run(BrokerDemoMainApplication.class,args);
+        }else {
+            context = SpringApplication.run(BrokerDemoMainApplication.class);
+        }
         APIKeyHolder apiKeyHolder = (APIKeyHolder)context.getBean("APIKeyHolder");
         apiKeyHolder.init(apiKey,secertKey,passPhrase);
         return (Client)context.getBean(Client.class);
     }
 
     public static Client ClientFactory(String Accesstoken,String[] args){
-        ApplicationContext context = SpringApplication.run(BrokerDemoMainApplication.class,args);
+        ApplicationContext context;
+        if(args != null){
+            context = SpringApplication.run(BrokerDemoMainApplication.class,args);
+        }else {
+            context = SpringApplication.run(BrokerDemoMainApplication.class);
+        }
+
         APIKeyHolder apiKeyHolder = (APIKeyHolder)context.getBean("APIKeyHolder");
         apiKeyHolder.init(Accesstoken);
         return (Client)context.getBean(Client.class);

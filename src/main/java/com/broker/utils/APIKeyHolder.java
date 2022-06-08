@@ -50,6 +50,10 @@ public class APIKeyHolder {
         return passPhrase;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
     public AutorizationMethod getAutorizationMethod(){
         return this.autorizationMethod;
     }
