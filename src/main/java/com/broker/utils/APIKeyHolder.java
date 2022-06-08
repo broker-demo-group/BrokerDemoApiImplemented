@@ -9,6 +9,9 @@ public class APIKeyHolder {
     private String secretKey;
     private String passPhrase;
 
+    private String accessToken;
+
+    private AutorizationMethod autorizationMethod;
     public APIKeyHolder(){
 
     }
@@ -17,6 +20,22 @@ public class APIKeyHolder {
         this.apiKey = apiKey;
         this.secretKey = secertKey;
         this.passPhrase = passPhrase;
+        autorizationMethod = AutorizationMethod.APIKeyPair;
+
+    }
+
+    public void init(String accessToken){
+        this.accessToken = accessToken;
+        autorizationMethod = AutorizationMethod.AccessToken;
+    }
+
+    public boolean renewToken(String newToken){
+        if(autorizationMethod.equals(AutorizationMethod.AccessToken)){
+            this.accessToken = newToken;
+            return true;
+        }
+        return false;
+
     }
 
     public String getApiKey() {
@@ -29,5 +48,9 @@ public class APIKeyHolder {
 
     public String getPassPhrase() {
         return passPhrase;
+    }
+
+    public AutorizationMethod getAutorizationMethod(){
+        return this.autorizationMethod;
     }
 }

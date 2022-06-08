@@ -13,14 +13,21 @@ import org.springframework.context.ApplicationContext;
 @EnableFeignClients
 public class BrokerDemoMainApplication {
     public static void main(String[] args){
-        
+
+
     }
 
     public static Client ClientFactory(String apiKey,String secertKey,String passPhrase,String[] args){
         ApplicationContext context = SpringApplication.run(BrokerDemoMainApplication.class,args);
-        log.info("BrokerDemoMainApplication started succ !!！");
         APIKeyHolder apiKeyHolder = (APIKeyHolder)context.getBean("APIKeyHolder");
         apiKeyHolder.init(apiKey,secertKey,passPhrase);
-        return (Client)context.getBean("Client");
+        return (Client)context.getBean(Client.class);
+    }
+
+    public static Client ClientFactory(String Accesstoken,String[] args){
+        ApplicationContext context = SpringApplication.run(BrokerDemoMainApplication.class,args);
+        APIKeyHolder apiKeyHolder = (APIKeyHolder)context.getBean("APIKeyHolder");
+        apiKeyHolder.init(Accesstoken);
+        return (Client)context.getBean(Client.class);
     }
 }
