@@ -1,0 +1,4 @@
+logging:
+  level:
+    com.broker.feign.AssetFeignService: debug
+    com.broker.feign.SystemFeignService: debug
