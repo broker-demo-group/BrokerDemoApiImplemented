@@ -11,4 +11,6 @@ public interface CommonRequestRetrofit{
 
     @GET
     Call<String> commonGetRequest(@Url String endpoint, @HeaderMap Map<String,String> headers);
+
+
 }
