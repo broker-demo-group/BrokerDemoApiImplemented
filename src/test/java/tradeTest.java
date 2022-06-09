@@ -36,17 +36,21 @@ public class tradeTest {
         orderMap.put("side","buy");
         orderMap.put("sz","0.005");
         orderMap.put("px","200.00");
+
         try {
             String res = trade.placeOrderRetrofit(orderMap);
+            System.out.println("Retrofit.RequestSuccessful");
             System.out.println(res);
         } catch (IOException e) {
-            System.out.println("RequestError");
+            System.out.println("Retrofit.RequestException");
         }
+
         try{
             String res = trade.placeOrder(orderMap);
             System.out.println(res);
         }catch (Exception e) {
-            System.out.println("RequestError");
+            System.out.println("Feign.RequestException");
+            System.out.println(e.toString());
         }
 
 
