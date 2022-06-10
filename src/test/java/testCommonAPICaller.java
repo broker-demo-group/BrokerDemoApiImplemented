@@ -27,16 +27,16 @@ public class testCommonAPICaller {
 
         DemoElement demoElement = new DemoElement();
         try {
-            Map<String,String> r = commonAPICaller.requestAPI("POST","/api/v5/trade/order",demoElement);
+            Map<String,String> r = commonAPICaller.requestAPI("POST","/api/v5/trade/order",demoElement,false);
             System.out.println(r);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         try {
-            Map<String,String> r = commonAPICaller.requestAPI("POST","/api/v5/trade/order",demoElement);
+            Map<String,String> r = commonAPICaller.requestAPI("POST","/api/v5/trade/order",demoElement,false);
             System.out.println(r);
-            r = commonAPICaller.requestAPI("GET","/api/v5/trade/order",demoElement);
+            r = commonAPICaller.requestAPI("GET","/api/v5/trade/order",demoElement,false);
 
             System.out.println(r);
 
