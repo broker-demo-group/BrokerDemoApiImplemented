@@ -38,7 +38,7 @@ public class Trade {
     private APIKeyHolder apiKeyHolder;
 
     public Trade(){}
-    public String placeOrderRetrofit(Map<String,Object> orderMap) throws IOException {
+    public String placeOrderRetrofit(Map<String,Object> orderMap,boolean isSimluate) throws IOException {
         String API_URL = "https://aws.okx.com";
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -51,7 +51,7 @@ public class Trade {
 
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair)){
             String sign = SignatureGenerator.Generate(timeStamp,"POST",payload,"/api/v5/trade/order",apiKeyHolder.getSecretKey());
-            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase(),isSimluate);
             Call<HashMap<String,Object>> orderCall = service.placeOrder(headers,orderMap);
             Response<HashMap<String,Object>> response= orderCall.execute();
             Request req= orderCall.request();
@@ -62,7 +62,7 @@ public class Trade {
             return response.errorBody().string();
         }
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken)){
-            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken(),isSimluate);
             Call<HashMap<String,Object>> orderCall = service.placeOrder(headers,orderMap);
             Request req= orderCall.request();
             System.out.println(req);
@@ -75,7 +75,7 @@ public class Trade {
         }
         return "Err";
     }
-    public String placeOrder(Map<String,Object> orderMap){
+    public String placeOrder(Map<String,Object> orderMap,boolean isSimluate){
 
 
 
@@ -86,28 +86,28 @@ public class Trade {
         String result = "";
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair)){
             String sign = SignatureGenerator.Generate(timeStamp,"POST",payload,"/api/v5/trade/order",apiKeyHolder.getSecretKey());
-            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase(),isSimluate);
             result = tradeRequestClient.placeOrder(headers,orderMap);
         }
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken)){
-            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken(),isSimluate);
             result = tradeRequestClient.placeOrder(headers,orderMap);
         }
         return result;
     }
 
-    public String placeOrderBatch(List<Map<String,Object>> orderList){
+    public String placeOrderBatch(List<Map<String,Object>> orderList,boolean isSimluate){
         String payload = new Gson().toJson(orderList);
         String timeStamp = Instant.now().toString();
         Map<String,String> headers;
         String result = "";
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair)){
             String sign = SignatureGenerator.Generate(timeStamp,"POST",payload,"/api/v5/trade/order",apiKeyHolder.getSecretKey());
-            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase(),isSimluate);
             result = tradeRequestClient.batchOrder(headers,orderList);
         }
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken)){
-            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken(),isSimluate);
             result = tradeRequestClient.batchOrder(headers,orderList);
         }
         return result;

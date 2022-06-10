@@ -30,14 +30,14 @@ public class CommonAPICaller<E extends APIRequestPayload,R>  {
        // Class cls = HashMap.class;
     }
 
-    public R requestAPI(String method,String path,E element) throws IOException {
+    public R requestAPI(String method,String path,E element,boolean isSimluate) throws IOException {
         String payload = element.getPayLoadJson();
         String timeStamp = Instant.now().toString();
         Map<String,String> headers;
         Type retTyp = new TypeToken<R>() { }.getType();
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair) && method.equals("POST")){
             String sign = SignatureGenerator.Generate(timeStamp,method,payload,path,apiKeyHolder.getSecretKey());
-            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase(),isSimluate);
             Call<String> requestCall = requestHandler.commonPostRequest(path,headers,payload);
             Response<String> response= requestCall.execute();
 
@@ -51,7 +51,7 @@ public class CommonAPICaller<E extends APIRequestPayload,R>  {
         }
 
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken) && method.equals("POST")){
-            headers = headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            headers = headerMapBuilder.build(apiKeyHolder.getAccessToken(),isSimluate);
             Call<String> requestCall = requestHandler.commonPostRequest(path,headers,payload);
             Response<String> response= requestCall.execute();
             if(response.isSuccessful()){
@@ -79,7 +79,7 @@ public class CommonAPICaller<E extends APIRequestPayload,R>  {
             }
 
             String sign = SignatureGenerator.Generate(timeStamp,method,"",path,apiKeyHolder.getSecretKey());
-            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase(),isSimluate);
             Call<String> requestCall = requestHandler.commonGetRequest(path,headers);
             Response<String> response= requestCall.execute();
             if(response.isSuccessful()){
@@ -89,7 +89,7 @@ public class CommonAPICaller<E extends APIRequestPayload,R>  {
         }
 
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken) && method.equals("GET")){
-            headers = headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            headers = headerMapBuilder.build(apiKeyHolder.getAccessToken(),isSimluate);
             Map<String,Object> queryMap = new Gson().fromJson(payload,Map.class);
             if(queryMap.size()>0){
                 path =path + "?";

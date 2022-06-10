@@ -38,7 +38,7 @@ public class tradeTest {
         orderMap.put("px","200.00");
 
         try {
-            String res = trade.placeOrderRetrofit(orderMap);
+            String res = trade.placeOrderRetrofit(orderMap,false);
             System.out.println("Retrofit.RequestSuccessful");
             System.out.println(res);
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class tradeTest {
         }
 
         try{
-            String res = trade.placeOrder(orderMap);
+            String res = trade.placeOrder(orderMap,false);
             System.out.println(res);
         }catch (Exception e) {
             System.out.println("Feign.RequestException");

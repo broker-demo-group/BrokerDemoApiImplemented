@@ -15,17 +15,24 @@ public class headerMapBuilder {
      *
      *
      */
-    public static Map<String,String> build(String accessKey,String sign,String timeStamp,String passPhrase){
+    public static Map<String,String> build(String accessKey,String sign,String timeStamp,String passPhrase,boolean isSimluate){
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("OK-ACCESS-KEY",accessKey);
         headerMap.put("OK-ACCESS-SIGN",sign);
         headerMap.put("OK-ACCESS-TIMESTAMP",timeStamp);
         headerMap.put("OK-ACCESS-PASSPHRASE",passPhrase);
+        if(isSimluate){
+            headerMap.put("x-simulated-trading","1");
+        }
+
         return headerMap;
     }
-    public static Map<String,String> build(String accessToken){
+    public static Map<String,String> build(String accessToken,boolean isSimluate){
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer "+accessToken);
+        if(isSimluate){
+            headerMap.put("x-simulated-trading","1");
+        }
         return headerMap;
     }
 }
