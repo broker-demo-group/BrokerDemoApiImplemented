@@ -6,6 +6,7 @@ import com.broker.utils.SignatureGenerator;
 import com.broker.utils.headerMapBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import jdk.nashorn.internal.parser.TokenType;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -14,7 +15,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CommonAPICaller<E extends APIRequestPayload,R>  {
@@ -55,9 +55,11 @@ public class CommonAPICaller<E extends APIRequestPayload,R>  {
             Call<String> requestCall = requestHandler.commonPostRequest(path,headers,payload);
             Response<String> response= requestCall.execute();
             if(response.isSuccessful()){
+
                 return new Gson().fromJson(response.body(),retTyp);
             }
             return new Gson().fromJson(response.errorBody().string(),retTyp);
+
         }
         //handleGetRequest
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair) && method.equals("GET")){

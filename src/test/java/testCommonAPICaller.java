@@ -23,11 +23,13 @@ public class testCommonAPICaller {
     public void testCallerPost(){
         apiKeyHolder = client.getApiKeyHolder();
         CommonAPICaller<DemoElement, Map<String,String>> commonAPICaller = new CommonAPICaller<>(API_URL,apiKeyHolder);
+
+
         DemoElement demoElement = new DemoElement();
         try {
             Map<String,String> r = commonAPICaller.requestAPI("POST","/api/v5/trade/order",demoElement);
             System.out.println(r);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -38,7 +40,7 @@ public class testCommonAPICaller {
 
             System.out.println(r);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

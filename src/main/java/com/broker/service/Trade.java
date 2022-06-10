@@ -15,10 +15,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
+import retrofit2.http.HeaderMap;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -90,6 +92,23 @@ public class Trade {
         if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken)){
             headers =headerMapBuilder.build(apiKeyHolder.getAccessToken());
             result = tradeRequestClient.placeOrder(headers,orderMap);
+        }
+        return result;
+    }
+
+    public String placeOrderBatch(List<Map<String,Object>> orderList){
+        String payload = new Gson().toJson(orderList);
+        String timeStamp = Instant.now().toString();
+        Map<String,String> headers;
+        String result = "";
+        if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.APIKeyPair)){
+            String sign = SignatureGenerator.Generate(timeStamp,"POST",payload,"/api/v5/trade/order",apiKeyHolder.getSecretKey());
+            headers = headerMapBuilder.build(apiKeyHolder.getApiKey(),sign,timeStamp, apiKeyHolder.getPassPhrase());
+            result = tradeRequestClient.batchOrder(headers,orderList);
+        }
+        if(apiKeyHolder.getAutorizationMethod().equals(AutorizationMethod.AccessToken)){
+            headers =headerMapBuilder.build(apiKeyHolder.getAccessToken());
+            result = tradeRequestClient.batchOrder(headers,orderList);
         }
         return result;
     }
